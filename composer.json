@@ -1,13 +1,19 @@
 {
-    "name": "andre/syroute",
+    "name": "simplesmente/syroute",
     "description": "Simple Router for methods GET and POST",
     "license": "MIT",
+    
+    "keywords": [
+        "router"
+     ],
+    
     "authors": [
         {
             "name": "André Teles",
             "email": "andre.telestp@gmail.com"
         }
     ],
+    
     "autoload": {
         "psr-4":{
             "Simply\\":"src"
