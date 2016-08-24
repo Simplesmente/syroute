@@ -2,7 +2,7 @@
 namespace Simply\Route;
 
 use ReflectionClass;
-
+use Exception;
 
 /**
  * @author André Teles <andre.teletp@gmail.com>
@@ -21,8 +21,9 @@ class SyRoute
 
 
 	/**
-	 * @todo
+	 * @Todo
 	 */
+	
 	private $app;
 
 	private $methodsAllowed = ['GET','POST'];
@@ -35,62 +36,41 @@ class SyRoute
 	}
 
 	/**
-	 * 
+	 * @method void parser controller and assign controllers, method and resources.
+	 * @param string $resource Resource to be accessed
+	 * @param string $controller Controller to be accessed
 	 */
-	private function addRoute($methodHttp,$resource,$controller)
+	public function addRoute($resource,$controller)
 	{
-		if(!$this->methodValid($methodHttp)){
-			throw new Exception("Method Not Allowed this request");
-		}
+		// if(!$this->methodValid($methodHttp)){
+		// 	throw new Exception("Method Not Allowed this request");
+		// }
 		
 		$this->sanitizeController($controller);
 
 		$this->resources['resource'][]= [
-							'route'      => $resource,
-							'controller' => $this->controller,
-							'method'     => $this->method
+							'route'         => $resource,
+							'controller'    => $this->controller,
+							'method'        => $this->method,
 						];
 	}
 
-	/**
-	 * 
-	 * @method void Do request with method GET
-	 * @param string $resource Resource the be access
-	 * @param string $controller Controller
-	 * 
-	 */
-
-	public function get($resource, $controller)
-	{
-		$this->addRoute("GET",$resource,$controller);
-	}
-
-	/**
-	 * @method void Do request with method POST
-	 * @param string $resource Resource the be access
-	 * @param string $controller Controller
-	 */
-
-	public function post($resource, $controller)
-	{
-		$this->addRoute("POST",$resource,$controller);
-	}
 
 	/**
 	 * @method void Run Request current and match with routes defined previous 
 	 */
 
-	public function run()
+	public function dispath()
 	{
 		$uri = $this->uri();
 	
-		
 		array_walk($this->resources['resource'],function($resource)use($uri){
 			
 			$params=[];
 			
-			if($resource['route'] == $uri['path']){
-			
+			if($resource['route'] == $uri['path'] 
+				&& $this->methodValid()){
+
 				return call_user_func([$this->makeObject($this->controller[0]),$this->method[0]]);
 				
 			}
@@ -109,14 +89,14 @@ class SyRoute
 
 	/**
 	 * @method boolean Check if is method is allowed and is method from the request current
-	 * @param string $method
+	 * 
 	 */
 
-	private function methodValid($method)
-	{	
-		if(!(in_array($method, $this->methodsAllowed) && $_SERVER['REQUEST_METHOD'] == $method) ){
-
-			return false;
+	private function methodValid()
+	{
+		if(!in_array($_SERVER['REQUEST_METHOD'],$this->methodsAllowed)){
+			unset($valid);
+			throw new Exception("Method Requested not Allowed");
 		}
 
 		return true;
@@ -154,8 +134,6 @@ class SyRoute
 	
 	private function makeObject($class)
 	{
-
-		
 		$obj = new ReflectionClass($class);
 
 		if($obj->isInstantiable()){

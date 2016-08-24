@@ -1,6 +1,8 @@
 # PHP SyRoute class
 
 Simple Router for methods GET and POST.
+<br>  
+This class handle all requests coming from Verbs GET and POST
 
 # Author
 
@@ -15,16 +17,30 @@ $ not yet published
 
 ## Usage
 
-
-```
-
-This is a simple example of routers in action
-
 ```php
 <?php
-require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/src/Route/SyRoute.php';
  
- Code TODO
+
+$route = new Simply\Route\SyRoute;
+
+## Use without params
+
+$route->addRoute('/','App\Controller\ExampleController@index');
+
+## Use params type Strings
+
+$route->addRoute('/post/(\w+)','App\Controller\HomeController@home');
+
+## Use params type Integer
+
+$route->addRoute('/post/(\d+)','App\Controller\HomeController@home');
+
+$route->dispath(); // Run all requests from the URI 
+
+
+
+
 
 ```
 
