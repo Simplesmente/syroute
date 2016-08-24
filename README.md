@@ -2,7 +2,7 @@
 
 Simple Router for methods GET and POST.
 
-# Authors
+# Author
 
 - [André Teles](https://github.com/Simplesmente)
 
@@ -10,7 +10,7 @@ Simple Router for methods GET and POST.
 # Easy to install with **composer**
 
 ```sh
-$ composer require vendor/name
+$ not yet published
 ```
 
 ## Usage
